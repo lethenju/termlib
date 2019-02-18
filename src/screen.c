@@ -7,14 +7,13 @@ void screen_init(termlib_context *ctx, int width, int height)
 {
     int i;
     termlib_screen *screen = (termlib_screen *)malloc(sizeof(termlib_screen));
-    screen->pixels = (pixel **)malloc(sizeof(pixel*));
+    screen->pixels = (pixel *)malloc(sizeof(pixel)+ width * height);
     screen->width = width;
     screen->height = height;
     for (i = 0; i < width * height; i++)
     {
-        pixel *p = malloc(sizeof(pixel));
+        pixel *p = (screen->pixels + i);
         p->rep = ' ';
-        *(screen->pixels + i) = p;
     }
     ctx->screen = screen;
     pthread_create(&screen->display_thread, NULL, (void *)screen_display_thread, (void *)ctx);
@@ -23,11 +22,12 @@ void screen_init(termlib_context *ctx, int width, int height)
 void display(termlib_screen *screen)
 {
     int i, j;
+    system("clear");
     for (i = 0; i < screen->width; i++)
     {
         for (j = 0; j < screen->height; j++)
         {
-            pixel *p = (pixel *)(((void *)screen->pixels) + i * screen->height + j);
+            pixel *p = (screen->pixels) + i * screen->height + j;
             printf("%c", p->rep);
         }
         printf("\n\r");
@@ -41,6 +41,7 @@ void *screen_display_thread(void *ctx_arg)
     while (!ctx->exit)
     {
         display(ctx->screen);
+        usleep(100000);
         // TODO WAIT FOR EVENT
     }
 }
