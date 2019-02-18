@@ -1,22 +1,29 @@
-#include <stdio.h>
 #include <stdlib.h>
-#include "termlib/screen.h"
-#include "termlib/termlib.h"
+#include <sys/ioctl.h>
+#include <stdio.h>
+#include <unistd.h>
 
-void* init(termlib_context* ctx){
-    // Implement your high level code from here
-    
-    // Edges of the screen
-    fill_rectangle(ctx->screen, 0, 0, ctx->screen->width,1,'-');
-    fill_rectangle(ctx->screen, 0, 0, 1, ctx->screen->height,'|');
-    fill_rectangle(ctx->screen, ctx->screen->width - 1, 0, 1, ctx->screen->height,'|');
-    fill_rectangle(ctx->screen, 0, ctx->screen->height - 1 ,ctx->screen->width, 1,'-');
-    
-    cursor_init(ctx, 5, 5, '*');
-    display_cursor(ctx->screen, &ctx->cursor);   
+#include "termlib_types.h"
+#include "screen.h"
+#include "cursor.h"
+
+termlib_context *termlib_init(void (*init_func)(termlib_context*))
+{
+    system("/bin/stty raw"); // TODO state restoration
+    termlib_context *context = (termlib_context *)malloc(sizeof(termlib_context));
+    // Getting windows nb col/rows
+    struct winsize w;
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+    screen_init(context, w.ws_col-1, w.ws_row-1);
+
+  
+    context->exit = 0;
+    (*init_func)(context);
+    return context;
 }
 
-void* event_loop(termlib_context* ctx) {
+void termlib_event_loop(termlib_context *ctx, void(*event_loop)(termlib_context*))
+{
     char c;
     while((c=getchar())!= '.') {
         switch (c){
@@ -40,13 +47,12 @@ void* event_loop(termlib_context* ctx) {
         fill_rectangle(ctx->screen, 1,1, ctx->screen->width-2, ctx->screen->height-2,' ');
         display_cursor(ctx->screen, &ctx->cursor);     
     }
+    system("clear");
+    ctx->exit = 1;
+
 }
 
-
-// DO NOT TOUCH MAIN
-int main(int argc, char *argv[])
+void termlib_end(termlib_context *ctx)
 {
-    termlib_context* ctx = termlib_init((void*)init);
-    termlib_event_loop(ctx, (void*)event_loop);
-    return 0;
+    // TODO FREE!
 }
