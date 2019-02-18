@@ -10,11 +10,7 @@ void screen_init(termlib_context *ctx, int width, int height)
     screen->pixels = (pixel *)malloc(sizeof(pixel)+ width * height);
     screen->width = width;
     screen->height = height;
-    for (i = 0; i < width * height; i++)
-    {
-        pixel *p = (screen->pixels + i);
-        p->rep = ' ';
-    }
+    fill_rectangle(screen, 0,0, width, height,' ');
     ctx->screen = screen;
     pthread_create(&screen->display_thread, NULL, (void *)screen_display_thread, (void *)ctx);
 }
@@ -23,9 +19,9 @@ void display(termlib_screen *screen)
 {
     int i, j;
     system("clear");
-    for (i = 0; i < screen->width; i++)
+    for (j = 0; j < screen->height; j++)
     {
-        for (j = 0; j < screen->height; j++)
+        for (i = 0; i < screen->width; i++)
         {
             pixel *p = (screen->pixels) + i * screen->height + j;
             printf("%c", p->rep);
@@ -46,9 +42,18 @@ void *screen_display_thread(void *ctx_arg)
     }
 }
 
+void fill_rectangle(termlib_screen *ctx, int posX, int posY, int width, int height, char rep) {
+    int i,j;
+    for (i = 0; i < width; i++) {
+        for ( j = 0; j < height; j++ ) {
+            set_pixel(ctx,posX+i, posY+j, rep);
+        }
+    }
+}
+
 void set_pixel(termlib_screen *ctx, int posX, int posY, char c)
 {
-    pixel *p = (pixel *)(((void *)ctx->pixels) + posX * ctx->height + posY);
+    pixel *p = ctx->pixels + posX * ctx->height + posY;
     p->rep = c;
 }
 

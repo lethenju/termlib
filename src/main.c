@@ -7,6 +7,5 @@ int main(int argc, char *argv[])
 {
     termlib_context* ctx =  termlib_init();
     termlib_event_loop(ctx);
-
     return 0;
 }

@@ -9,4 +9,7 @@ void *screen_display_thread(void * ctx);
 void set_pixel(termlib_screen * ctx, int posX, int posY, char c);
 
 char get_pixel(termlib_screen * ctx, int posX, int posY);
+
+void fill_rectangle(termlib_screen * ctx, int posX, int posY, int width, int height, char rep);
+
 #endif

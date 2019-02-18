@@ -2,26 +2,33 @@
 #define TERMLIB_TYPES_H
 #include <pthread.h>
 
-typedef struct pixel_t {
+typedef struct {
     char rep;
 } pixel;
 
-typedef struct termlib_screen_t {
+typedef struct {
     unsigned int width;
     unsigned int height;
     pthread_t display_thread;
-    pixel**  pixels;
+    pixel*  pixels;
 } termlib_screen;
 
-typedef struct termlib_input_t {
+typedef struct {
     pthread_t input_thread;
 } termlib_input;
 
+typedef struct {
+    int posX;
+    int posY;
+    char rep;
+} termlib_cursor;
 
-typedef struct termlib_context_t {
+typedef struct {
     termlib_screen* screen;
     termlib_input* input;
+    termlib_cursor cursor;
     volatile int exit;
 } termlib_context;
+
 
 #endif
