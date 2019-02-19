@@ -61,22 +61,15 @@ void draw_line(termlib_screen *ctx, int posX, int posY, int posX2, int posY2, ch
 
     float diffX = posX2 - posX;
     float diffY = posY2 - posY;
-    int i;
-    if (diffX <= diffY && diffY !=0) 
+    float i;
+    int max = (abs(diffX) > abs(diffY))? abs(diffX) : abs(diffY);
+      
+    for (i = 0; i < max; i++) 
     {
-        for (i = 0; i < (int)diffY; i++) 
-        {
-            set_pixel(ctx,(int) (posX + i*(diffX/diffY)), i+posY, rep);
-        }
-    } else if (diffX != 0) {
-
-        for (i = 0; i < (int)diffX; i++) 
-        {
-            set_pixel(ctx, i+posX, (int) (posX + i*(diffY/diffX)), rep);
-        }
+        set_pixel(ctx,(int) (posX+(i/max)*diffX),(int) (posY+(i/max)*diffY), rep);
     }
-    
 }
+
 void draw_circle(termlib_screen *ctx, int posX, int posY, int radius, char rep) {
 
 }
