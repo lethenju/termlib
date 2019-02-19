@@ -24,29 +24,7 @@ termlib_context *termlib_init(void (*init_func)(termlib_context*))
 
 void termlib_event_loop(termlib_context *ctx, void(*event_loop)(termlib_context*))
 {
-    char c;
-    while((c=getchar())!= '.') {
-        switch (c){
-            case 'z':
-                    if (ctx->cursor.posY > 1)
-                        ctx->cursor.posY--;
-                    break;
-            case 'q':
-                    if (ctx->cursor.posX > 1)
-                        ctx->cursor.posX--;
-                    break;
-            case 's':
-                    if (ctx->cursor.posY < ctx->screen->height - 2)
-                        ctx->cursor.posY++;
-                    break;
-            case 'd':
-                    if (ctx->cursor.posX < ctx->screen->width - 2)
-                        ctx->cursor.posX++;
-                    break;
-        }       
-        fill_rectangle(ctx->screen, 1,1, ctx->screen->width-2, ctx->screen->height-2,' ');
-        display_cursor(ctx->screen, &ctx->cursor);     
-    }
+    (*event_loop)(ctx);
     system("clear");
     ctx->exit = 1;
 

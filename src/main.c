@@ -12,7 +12,9 @@ void* init(termlib_context* ctx){
     fill_rectangle(ctx->screen, ctx->screen->width - 1, 0, 1, ctx->screen->height,'|');
     fill_rectangle(ctx->screen, 0, ctx->screen->height - 1 ,ctx->screen->width, 1,'-');
     
+
     cursor_init(ctx, 5, 5, '*');
+    draw_line(ctx->screen, (int)ctx->screen->width/2,(int)ctx->screen->height/2,ctx->cursor.posX, ctx->cursor.posY,'o');
     display_cursor(ctx->screen, &ctx->cursor);   
 }
 
@@ -38,6 +40,7 @@ void* event_loop(termlib_context* ctx) {
                     break;
         }       
         fill_rectangle(ctx->screen, 1,1, ctx->screen->width-2, ctx->screen->height-2,' ');
+        draw_line(ctx->screen, (int)ctx->screen->width/2,(int)ctx->screen->height/2,ctx->cursor.posX, ctx->cursor.posY,'o');
         display_cursor(ctx->screen, &ctx->cursor);     
     }
 }
