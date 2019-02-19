@@ -20,7 +20,6 @@ void* init(termlib_context* ctx){
 }
 
 void* event_loop(termlib_context* ctx) {
-    char c;
     float angle = 0;
     while(1) {  
         ctx->cursor.posX= ctx->screen->width/2 + cos(angle)*ctx->screen->width/3;
