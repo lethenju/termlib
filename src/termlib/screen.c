@@ -43,7 +43,11 @@ void *screen_display_thread(void *ctx_arg)
 }
 
 void draw_rectangle(termlib_screen *ctx, int posX, int posY, int width, int height, char rep) {
-
+    draw_line(ctx, posX, posY, posX+width, posY, rep);
+    draw_line(ctx, posX, posY, posX, posY+height, rep);
+    draw_line(ctx, posX+width, posY+height, posX+width, posY, rep);
+    draw_line(ctx, posX+width, posY+height, posX, posY+height, rep);
+    
 }
 
 void fill_rectangle(termlib_screen *ctx, int posX, int posY, int width, int height, char rep) {
@@ -71,11 +75,22 @@ void draw_line(termlib_screen *ctx, int posX, int posY, int posX2, int posY2, ch
 }
 
 void draw_circle(termlib_screen *ctx, int posX, int posY, int radius, char rep) {
-
+    radius = abs(radius);
+    float perimeter = 10*radius;
+    float i;
+    for (i=0; i < perimeter; i++)
+    {
+        set_pixel(ctx, posX + radius*cos(i/radius), posY + radius*sin(i/radius), rep);
+    }
 }
 
 void fill_circle(termlib_screen *ctx, int posX, int posY, int radius, char rep) {
-
+    int i = 0;
+    for (i = 0; i < radius; i++) 
+    {
+        draw_circle(ctx, posX, posY, i, rep);
+    }
+    
 }
 
 
@@ -85,6 +100,17 @@ void set_pixel(termlib_screen *ctx, int posX, int posY, char c)
     p->rep = c;
 }
 
+void write_text(termlib_screen *ctx, int posX, int posY, char* string) 
+{
+    int i = 0;
+    for (i = 0; i < strlen(string); i++) 
+    {
+        set_pixel(ctx, posX + i, posY, *(string+i));
+    }
+
+}
+
 char get_pixel(termlib_screen *ctx, int posX, int posY)
 {
+    return ctx->pixels + posX * ctx->height + posY;
 }

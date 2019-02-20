@@ -16,4 +16,6 @@ void fill_rectangle(termlib_screen *ctx, int posX, int posY, int width, int heig
 void draw_line(termlib_screen *ctx, int posX, int posY, int posX2, int posY2, char rep);
 void draw_circle(termlib_screen *ctx, int posX, int posY, int radius, char rep);
 void fill_circle(termlib_screen *ctx, int posX, int posY, int radius, char rep);
+void write_text(termlib_screen *ctx, int posX, int posY, char* string);
+
 #endif
