@@ -7,17 +7,21 @@
 #include "screen.h"
 #include "cursor.h"
 
-termlib_context *termlib_init(void (*init_func)(termlib_context*))
-{
+
+// when no specific callback init 
+termlib_context *termlib_init2() {
     system("/bin/stty raw"); // TODO state restoration
     termlib_context *context = (termlib_context *)malloc(sizeof(termlib_context));
     // Getting windows nb col/rows
     struct winsize w;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
     screen_init(context, w.ws_col-1, w.ws_row-1);
-
-  
     context->exit = 0;
+}
+// With callback
+termlib_context *termlib_init(void (*init_func)(termlib_context*))
+{
+    termlib_context* context = termlib_init2(init_func);
     (*init_func)(context);
     return context;
 }
