@@ -146,7 +146,7 @@ void write_text(termlib_screen *ctx, int posX, int posY, char* string, color_enu
 
 }
 
-char get_pixel(termlib_screen *ctx, int posX, int posY)
+pixel* get_pixel(termlib_screen *ctx, int posX, int posY)
 {
-    return (ctx->pixels + posX * ctx->height + posY)->rep;
+    return ctx->pixels + posX * ctx->height + posY;
 }

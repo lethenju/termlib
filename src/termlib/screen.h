@@ -34,12 +34,12 @@ void screen_frame_ready(termlib_screen * ctx);
 void set_pixel(termlib_screen * ctx, int posX, int posY, char c, color_enum_fg fg, color_enum_bg bg);
 
 /** returns the chararacter of a given 'pixel' in the screen with its coordinates
- *  @param ctx    : a pointer to the temrlib context data structure
- *  @param posX   : the X coordinate of the 'pixel' to get, in cols
- *  @param posY   : the Y coordinate of the 'pixel' to get, in rows
- *  @returns char : the character at the given position
+ *  @param ctx      : a pointer to the temrlib context data structure
+ *  @param posX     : the X coordinate of the 'pixel' to get, in cols
+ *  @param posY     : the Y coordinate of the 'pixel' to get, in rows
+ *  @returns pixel* : a pointer to the pixel
  */
-char get_pixel(termlib_screen * ctx, int posX, int posY);
+pixel* get_pixel(termlib_screen * ctx, int posX, int posY);
 
 /** 'draws' a rectangle on the screen with the given characteristics 
  *  @param ctx    : a pointer to the screen context data structure (termlib_ctx->screen)
