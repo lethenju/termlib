@@ -7,5 +7,5 @@ void cursor_init(termlib_context *ctx, int posX, int posY, char rep) {
 }
 
 void display_cursor(termlib_screen *screen, termlib_cursor *cursor) {
-    set_pixel(screen, cursor->posX, cursor->posY, cursor->rep);
+    set_pixel(screen, cursor->posX, cursor->posY, cursor->rep, FG_DEFAULT, BG_DEFAULT);
 }

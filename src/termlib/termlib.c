@@ -17,6 +17,7 @@ termlib_context *termlib_init2() {
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
     screen_init(context, w.ws_col-1, w.ws_row-1);
     context->exit = 0;
+    return context;
 }
 // With callback
 termlib_context *termlib_init(void (*init_func)(termlib_context*))
