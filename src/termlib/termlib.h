@@ -19,7 +19,8 @@ termlib_context* termlib_init(void* init_func);
 void termlib_event_loop(termlib_context *ctx, void* event_loop);
 
 /** ends the termlib instance and frees data structure 
+ *  @param ctx  : a pointer to the termlib context data structure
  */
-void termlib_end(void);
+void termlib_end(termlib_context *ctx);
 
 #endif
