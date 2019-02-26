@@ -110,4 +110,9 @@ void fill_circle(termlib_screen *ctx, int posX, int posY, int radius, char rep, 
  */
 void write_text(termlib_screen *ctx, int posX, int posY, char* string, color_enum_fg fg, color_enum_bg bg);
 
+/** stops the display threads and free the data structures
+ *  @param ctx    : a pointer to the screen context data structure (termlib_ctx->screen)
+ */ 
+void screen_end(termlib_screen *ctx);
+
 #endif

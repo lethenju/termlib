@@ -27,15 +27,17 @@ termlib_context *termlib_init(void (*init_func)(termlib_context*))
     return context;
 }
 
+void termlib_end(termlib_context *ctx)
+{
+    ctx->exit = 1;
+    screen_end(ctx->screen);
+    free(ctx->input);
+    free(ctx);
+}
+
 void termlib_event_loop(termlib_context *ctx, void(*event_loop)(termlib_context*))
 {
     (*event_loop)(ctx);
     system("clear");
-    ctx->exit = 1;
-
-}
-
-void termlib_end(termlib_context *ctx)
-{
-    // TODO FREE!
+    termlib_end(ctx);
 }

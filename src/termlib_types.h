@@ -69,6 +69,7 @@ typedef struct {
     sem_t display_semaphore;  // semaphore blocked during display to avoid artefacts
     pixel*  pixels;           // pointer to the pixel buffer array
     pixel*  ready_pixels;     // pointer to the screen buffer array
+    volatile int stop;        // flag to stop the thread that draws the screen
 } termlib_screen;
 
 /** input structure, that links to input-related data
