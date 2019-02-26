@@ -56,8 +56,8 @@ typedef enum {
  */
 typedef struct {
     char rep; // representation of the pixel
-    color_enum_fg fg;
-    color_enum_bg bg;
+    color_enum_fg fg; // foreground (char) color
+    color_enum_bg bg; // background color
 } pixel; // TODO add color fg/bg as pixel fields
 
 /** represents the screen : the terminal area used by termlib
