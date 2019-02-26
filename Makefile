@@ -16,21 +16,21 @@ F1_EXISTS=$(shell [ -e $(BUILD_DIR) ] && echo Y || echo N )
 ### EXAMPLES TARGETS
 
 # CLOCK EXAMPLE
-clock: termlib.o cursor.o screen.o clock.o
+clock: setup termlib.o cursor.o screen.o clock.o
 	gcc -o $(EXE_DIR)/clock_exe $(OBJECTS_DIR)/* -lpthread -lm
 
 clock.o: $(EXAMPLES_DIR)/clock.c $(SRC_DIR)/termlib.h $(SRC_DIR)/screen.h
 	gcc -g -c $(EXAMPLES_DIR)/clock.c $(SRC_DIR) -o  $(OBJECTS_DIR)/clock.o
 
 # MAIN EXAMPLE
-main: termlib.o cursor.o screen.o main.o
+main: setup termlib.o cursor.o screen.o main.o
 	gcc -o $(EXE_DIR)/main_exe $(OBJECTS_DIR)/* -lpthread -lm
 
 main.o: $(EXAMPLES_DIR)/main.c $(SRC_DIR)/termlib.h $(SRC_DIR)/screen.h
 	gcc -g -c $(EXAMPLES_DIR)/main.c $(SRC_DIR) -o  $(OBJECTS_DIR)/main.o
 
 # PHYSICS EXAMPLE
-physics: termlib.o cursor.o screen.o physics.o
+physics: setup termlib.o cursor.o screen.o physics.o
 	gcc -o $(EXE_DIR)/physics_exe $(OBJECTS_DIR)/* -lpthread -lm
 
 physics.o: $(EXAMPLES_DIR)/physics.c $(SRC_DIR)/termlib.h $(SRC_DIR)/screen.h
