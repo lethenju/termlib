@@ -7,11 +7,7 @@ void* init(termlib_context* ctx){
     // Implement your high level code from here
     
     // Edges of the screen
-    fill_rectangle(ctx->screen, 0, 0, ctx->screen->width,1,'-', FG_DEFAULT, BG_DEFAULT);
-    fill_rectangle(ctx->screen, 0, 0, 1, ctx->screen->height,'|', FG_DEFAULT, BG_DEFAULT);
-    fill_rectangle(ctx->screen, ctx->screen->width - 1, 0, 1, ctx->screen->height,'|', FG_DEFAULT, BG_DEFAULT);
-    fill_rectangle(ctx->screen, 0, ctx->screen->height - 1 ,ctx->screen->width, 1,'-', FG_DEFAULT, BG_DEFAULT);
-    
+    fill_rectangle(ctx->screen, 0, 0, ctx->screen->width -1 , ctx->screen->height - 1,'-', FG_DEFAULT, BG_DEFAULT);
 
     cursor_init(ctx, 5, 5, '*');
     draw_line(ctx->screen, (int)ctx->screen->width/2,(int)ctx->screen->height/2,ctx->cursor.posX, ctx->cursor.posY,'o', FG_DEFAULT, BG_DEFAULT);
