@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "termlib/screen.h"
-#include "termlib/termlib.h"
+#include <math.h>
+#include "../src/screen.h"
+#include "../src/termlib.h"
 
 void* init(termlib_context* ctx){
     // Implement your high level code from here
@@ -13,32 +14,18 @@ void* init(termlib_context* ctx){
     fill_rectangle(ctx->screen, 0, ctx->screen->height - 1 ,ctx->screen->width, 1,'-');
     
 
-    cursor_init(ctx, 5, 5, '*');
+    cursor_init(ctx, ctx->screen->width/2, (int)ctx->screen->height/2, '*');
     draw_line(ctx->screen, (int)ctx->screen->width/2,(int)ctx->screen->height/2,ctx->cursor.posX, ctx->cursor.posY,'o');
     display_cursor(ctx->screen, &ctx->cursor);   
 }
 
 void* event_loop(termlib_context* ctx) {
-    char c;
-    while((c=getchar())!= '.') {
-        switch (c){
-            case 'z':
-                    if (ctx->cursor.posY > 1)
-                        ctx->cursor.posY--;
-                    break;
-            case 'q':
-                    if (ctx->cursor.posX > 1)
-                        ctx->cursor.posX--;
-                    break;
-            case 's':
-                    if (ctx->cursor.posY < ctx->screen->height - 2)
-                        ctx->cursor.posY++;
-                    break;
-            case 'd':
-                    if (ctx->cursor.posX < ctx->screen->width - 2)
-                        ctx->cursor.posX++;
-                    break;
-        }       
+    float angle = 0;
+    while(1) {  
+        ctx->cursor.posX= ctx->screen->width/2 + cos(angle)*ctx->screen->width/3;
+        ctx->cursor.posY= ctx->screen->height/2 + sin(angle)*ctx->screen->height/3;
+        angle+=0.01f;
+        usleep(10000);
         fill_rectangle(ctx->screen, 1,1, ctx->screen->width-2, ctx->screen->height-2,' ');
         draw_line(ctx->screen, (int)ctx->screen->width/2,(int)ctx->screen->height/2,ctx->cursor.posX, ctx->cursor.posY,'o');
         display_cursor(ctx->screen, &ctx->cursor);     

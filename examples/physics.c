@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "termlib/screen.h"
-#include "termlib/termlib.h"
+#include "../src/screen.h"
+#include "../src/termlib.h"
 
 
 float centerX;
