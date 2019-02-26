@@ -8,14 +8,14 @@ void* init(termlib_context* ctx){
     // Implement your high level code from here
     
     // Edges of the screen
-    fill_rectangle(ctx->screen, 0, 0, ctx->screen->width,1,'-');
-    fill_rectangle(ctx->screen, 0, 0, 1, ctx->screen->height,'|');
-    fill_rectangle(ctx->screen, ctx->screen->width - 1, 0, 1, ctx->screen->height,'|');
-    fill_rectangle(ctx->screen, 0, ctx->screen->height - 1 ,ctx->screen->width, 1,'-');
+    fill_rectangle(ctx->screen, 0, 0, ctx->screen->width,1,'-', FG_DEFAULT, BG_DEFAULT);
+    fill_rectangle(ctx->screen, 0, 0, 1, ctx->screen->height,'|', FG_DEFAULT, BG_DEFAULT);
+    fill_rectangle(ctx->screen, ctx->screen->width - 1, 0, 1, ctx->screen->height,'|', FG_DEFAULT, BG_DEFAULT);
+    fill_rectangle(ctx->screen, 0, ctx->screen->height - 1 ,ctx->screen->width, 1,'-', FG_DEFAULT, BG_DEFAULT);
     
 
     cursor_init(ctx, ctx->screen->width/2, (int)ctx->screen->height/2, '*');
-    draw_line(ctx->screen, (int)ctx->screen->width/2,(int)ctx->screen->height/2,ctx->cursor.posX, ctx->cursor.posY,'o');
+    draw_line(ctx->screen, (int)ctx->screen->width/2,(int)ctx->screen->height/2,ctx->cursor.posX, ctx->cursor.posY,'o', FG_DEFAULT, BG_DEFAULT);
     display_cursor(ctx->screen, &ctx->cursor);   
 }
 
@@ -26,8 +26,8 @@ void* event_loop(termlib_context* ctx) {
         ctx->cursor.posY= ctx->screen->height/2 + sin(angle)*ctx->screen->height/3;
         angle+=0.01f;
         usleep(10000);
-        fill_rectangle(ctx->screen, 1,1, ctx->screen->width-2, ctx->screen->height-2,' ');
-        draw_line(ctx->screen, (int)ctx->screen->width/2,(int)ctx->screen->height/2,ctx->cursor.posX, ctx->cursor.posY,'o');
+        fill_rectangle(ctx->screen, 1,1, ctx->screen->width-2, ctx->screen->height-2,' ', FG_DEFAULT, BG_DEFAULT);
+        draw_line(ctx->screen, (int)ctx->screen->width/2,(int)ctx->screen->height/2,ctx->cursor.posX, ctx->cursor.posY,'o', FG_DEFAULT, BG_DEFAULT);
         display_cursor(ctx->screen, &ctx->cursor);     
     }
 }

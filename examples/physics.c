@@ -10,17 +10,17 @@ void* init(termlib_context* ctx){
     // Implement your high level code from here
     
     // Edges of the screen
-    fill_rectangle(ctx->screen, 0, 0, ctx->screen->width,1,'-');
-    fill_rectangle(ctx->screen, 0, 0, 1, ctx->screen->height,'|');
-    fill_rectangle(ctx->screen, ctx->screen->width - 1, 0, 1, ctx->screen->height,'|');
-    fill_rectangle(ctx->screen, 0, ctx->screen->height - 1 ,ctx->screen->width, 1,'-');
+    fill_rectangle(ctx->screen, 0, 0, ctx->screen->width,1,'-', FG_DEFAULT, BG_DEFAULT);
+    fill_rectangle(ctx->screen, 0, 0, 1, ctx->screen->height,'|', FG_DEFAULT, BG_DEFAULT);
+    fill_rectangle(ctx->screen, ctx->screen->width - 1, 0, 1, ctx->screen->height,'|', FG_DEFAULT, BG_DEFAULT);
+    fill_rectangle(ctx->screen, 0, ctx->screen->height - 1 ,ctx->screen->width, 1,'-', FG_DEFAULT, BG_DEFAULT);
     
 
-    cursor_init(ctx, (int)ctx->screen->width/2 + 5,(int)ctx->screen->height/2, '*');
-    draw_line(ctx->screen, (int)ctx->screen->width/2,(int)ctx->screen->height/2,ctx->cursor.posX, ctx->cursor.posY,'o');
-    draw_circle(ctx->screen, (int)ctx->screen->width/2,(int)ctx->screen->height/2, (int)ctx->screen->height/4, '°');
+    cursor_init(ctx, (int)ctx->screen->width/2 + 5,(int)ctx->screen->height/2, '*', FG_DEFAULT, BG_DEFAULT);
+    draw_line(ctx->screen, (int)ctx->screen->width/2,(int)ctx->screen->height/2,ctx->cursor.posX, ctx->cursor.posY,'o', FG_DEFAULT, BG_DEFAULT);
+    draw_circle(ctx->screen, (int)ctx->screen->width/2,(int)ctx->screen->height/2, (int)ctx->screen->height/4, '°', FG_DEFAULT, BG_DEFAULT);
 
-    fill_circle(ctx->screen, (int)ctx->screen->width/2,(int)ctx->screen->height/2, (int)ctx->screen->height/5, '.');
+    fill_circle(ctx->screen, (int)ctx->screen->width/2,(int)ctx->screen->height/2, (int)ctx->screen->height/5, '.', FG_DEFAULT, BG_DEFAULT);
     display_cursor(ctx->screen, &ctx->cursor);   
 }
 
@@ -55,10 +55,10 @@ void* phys_loop(void* context) {
         diffX = centerX - (float)ctx->cursor.posX;
         diffY = centerY - (float)ctx->cursor.posY;
 
-        fill_rectangle(ctx->screen, 1,1, ctx->screen->width-2, ctx->screen->height-2,' ');
+        fill_rectangle(ctx->screen, 1,1, ctx->screen->width-2, ctx->screen->height-2,' ', FG_DEFAULT, BG_DEFAULT);
 
         if (cord_dist(ctx) > 20){
-            write_text(ctx->screen, 10, 9, "cor ! ");
+            write_text(ctx->screen, 10, 9, "cor ! ", FG_DEFAULT, BG_DEFAULT);
             accelX = diffX/(float)10.0f;
             accelY = diffY/(float)10.0f;
             ctx->cursor.posX += accelX;
@@ -73,9 +73,9 @@ void* phys_loop(void* context) {
 
 
         
-        fill_circle(ctx->screen, (int)centerX,(int)centerY, (int)ctx->screen->height/5, '.');    
-        draw_circle(ctx->screen, (int)centerX,(int)centerY, (int)ctx->screen->height/4, '°');
-        draw_line(ctx->screen, (int)centerX,(int)centerY,ctx->cursor.posX, ctx->cursor.posY,'o');
+        fill_circle(ctx->screen, (int)centerX,(int)centerY, (int)ctx->screen->height/5, '.', FG_DEFAULT, BG_DEFAULT);
+        draw_circle(ctx->screen, (int)centerX,(int)centerY, (int)ctx->screen->height/4, '°', FG_DEFAULT, BG_DEFAULT);
+        draw_line(ctx->screen, (int)centerX,(int)centerY,ctx->cursor.posX, ctx->cursor.posY,'o', FG_DEFAULT, BG_DEFAULT);
         display_cursor(ctx->screen, &ctx->cursor);     
     }
 }
