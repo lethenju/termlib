@@ -1,30 +1,32 @@
 # termlib
-Small terminal based application framework (WIP)
+Small terminal based application framework
 
 ## Usage
 
-Just implement the init, event_loop and end (NOT YET IMPL) functions to use the framework.
+Just implement the init, event_loop and end functions to use the framework.
+
+A real documentation is in project.
 
 Not yet suitable for real applications.
 
 ## Example
 
+You can see some implementations examples in the `examples` directory
+
 ```c
 #include <stdio.h>
 #include <stdlib.h>
-#include "termlib/screen.h"
-#include "termlib/termlib.h"
+#include "../src/screen.h"
+#include "../src/termlib.h"
 
 void* init(termlib_context* ctx){
     // Implement your high level code from here
     
     // Edges of the screen
-    fill_rectangle(ctx->screen, 0, 0, ctx->screen->width,1,'-');
-    fill_rectangle(ctx->screen, 0, 0, 1, ctx->screen->height,'|');
-    fill_rectangle(ctx->screen, ctx->screen->width - 1, 0, 1, ctx->screen->height,'|');
-    fill_rectangle(ctx->screen, 0, ctx->screen->height - 1 ,ctx->screen->width, 1,'-');
-    
+    fill_rectangle(ctx->screen, 0, 0, ctx->screen->width -1 , ctx->screen->height - 1,'-', FG_DEFAULT, BG_DEFAULT);
+
     cursor_init(ctx, 5, 5, '*');
+    draw_line(ctx->screen, (int)ctx->screen->width/2,(int)ctx->screen->height/2,ctx->cursor.posX, ctx->cursor.posY,'o', FG_DEFAULT, BG_DEFAULT);
     display_cursor(ctx->screen, &ctx->cursor);   
 }
 
@@ -49,7 +51,8 @@ void* event_loop(termlib_context* ctx) {
                         ctx->cursor.posX++;
                     break;
         }       
-        fill_rectangle(ctx->screen, 1,1, ctx->screen->width-2, ctx->screen->height-2,' ');
+        fill_rectangle(ctx->screen, 1,1, ctx->screen->width-2, ctx->screen->height-2,' ', FG_DEFAULT, BG_DEFAULT);
+        draw_line(ctx->screen, (int)ctx->screen->width/2,(int)ctx->screen->height/2,ctx->cursor.posX, ctx->cursor.posY,'o', FG_DEFAULT, BG_DEFAULT);
         display_cursor(ctx->screen, &ctx->cursor);     
     }
 }
