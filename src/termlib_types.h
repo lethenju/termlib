@@ -70,6 +70,7 @@ typedef struct {
     pixel*  pixels;           // pointer to the pixel buffer array
     pixel*  ready_pixels;     // pointer to the screen buffer array
     volatile int stop;        // flag to stop the thread that draws the screen
+    volatile int draw_screen; // flag to update and draw the screen
 } termlib_screen;
 
 /** input structure, that links to input-related data

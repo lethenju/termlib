@@ -16,6 +16,7 @@ void screen_init(termlib_context *ctx, int width, int height)
     fill_rectangle(screen, 0,0, width, height,' ', FG_DEFAULT, BG_DEFAULT);
     screen_frame_ready(screen);
     screen->stop = 0;
+    screen->draw_screen = 0;
     pthread_create(&screen->display_thread, NULL, (void *)screen_display_thread, (void *)screen);
     ctx->screen = screen;
 }
@@ -41,7 +42,7 @@ void display(termlib_screen *screen)
         printf("\n\r");
     }
     sem_post(&(screen->display_semaphore));
-
+    screen->draw_screen = 0;
 }
 
 void *screen_display_thread(void *ctx_arg)
@@ -50,9 +51,9 @@ void *screen_display_thread(void *ctx_arg)
 
     while (!ctx->stop)
     {
-        display(ctx);
         usleep(100000);
-        // TODO WAIT FOR EVENT
+        if (ctx->draw_screen)
+            display(ctx);
     }
 }
 
@@ -70,6 +71,7 @@ void screen_frame_ready(termlib_screen * ctx)
             
     }
     sem_post(&(ctx->display_semaphore));
+    ctx->draw_screen = 1;
 }
 
 void draw_rectangle(termlib_screen *ctx, int posX, int posY, int width, int height, char rep, color_enum_fg fg, color_enum_bg bg)
