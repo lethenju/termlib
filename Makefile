@@ -39,7 +39,9 @@ physics.o: $(EXAMPLES_DIR)/physics.c $(SRC_DIR)/termlib.h $(SRC_DIR)/screen.h
 ### END EXAMPLE TARGETS
 
 
-### LIB TARGET
+### LIB TARGET 
+
+lib : setup screen.o cursor.o termlib.o
 
 screen.o: $(SRC_DIR)/screen.c $(SRC_DIR)/screen.h
 	gcc -g -c $(SRC_DIR)/screen.c -o  $(OBJECTS_DIR)/screen.o
