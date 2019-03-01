@@ -33,6 +33,7 @@ void termlib_end(termlib_context *ctx)
     screen_end(ctx->screen);
     free(ctx->input);
     free(ctx);
+    system("/bin/stty sane"); // recover from raw tty mode
 }
 
 void termlib_event_loop(termlib_context *ctx, void(*event_loop)(termlib_context*))
