@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <unistd.h>
+#include <string.h>
 
 void screen_init(termlib_context *ctx, int width, int height)
 {

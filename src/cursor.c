@@ -1,4 +1,5 @@
 #include "termlib_types.h"
+#include "screen.h"
 
 void cursor_init(termlib_context *ctx, int posX, int posY, char rep) {
     ctx->cursor.posX = posX;
