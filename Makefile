@@ -16,21 +16,21 @@ F1_EXISTS=$(shell [ -e $(BUILD_DIR) ] && echo Y || echo N )
 ### EXAMPLES TARGETS
 
 # CLOCK EXAMPLE
-clock: setup termlib.o cursor.o screen.o clock.o
+clock: clean lib clock.o
 	gcc -o $(EXE_DIR)/clock_exe $(OBJECTS_DIR)/* -lpthread -lm
 
 clock.o: $(EXAMPLES_DIR)/clock.c $(SRC_DIR)/termlib.h $(SRC_DIR)/screen.h
 	gcc -g -c $(EXAMPLES_DIR)/clock.c $(SRC_DIR) -o  $(OBJECTS_DIR)/clock.o
 
 # MAIN EXAMPLE
-main: setup termlib.o cursor.o screen.o main.o
-	gcc -o $(EXE_DIR)/main_exe $(OBJECTS_DIR)/* -lpthread -lm
+main: clean lib main.o 
+	gcc -o $(EXE_DIR)/main_exe $(OBJECTS_DIR)/* log_system/build/obj/*.o -lpthread -lm
 
-main.o: $(EXAMPLES_DIR)/main.c $(SRC_DIR)/termlib.h $(SRC_DIR)/screen.h
-	gcc -g -c $(EXAMPLES_DIR)/main.c $(SRC_DIR) -o  $(OBJECTS_DIR)/main.o
+main.o: log_system_lib $(EXAMPLES_DIR)/main.c $(SRC_DIR)/termlib.h $(SRC_DIR)/screen.h
+	gcc -g -c $(EXAMPLES_DIR)/main.c $(SRC_DIR) -I./log_system/src/ -o  $(OBJECTS_DIR)/main.o
 
 # PHYSICS EXAMPLE
-physics: setup termlib.o cursor.o screen.o physics.o
+physics: clean lib physics.o
 	gcc -o $(EXE_DIR)/physics_exe $(OBJECTS_DIR)/* -lpthread -lm
 
 physics.o: $(EXAMPLES_DIR)/physics.c $(SRC_DIR)/termlib.h $(SRC_DIR)/screen.h
@@ -38,6 +38,15 @@ physics.o: $(EXAMPLES_DIR)/physics.c $(SRC_DIR)/termlib.h $(SRC_DIR)/screen.h
 
 ### END EXAMPLE TARGETS
 
+###
+
+log_system_lib:
+	@echo "Building log system lib"
+	cd log_system && $(MAKE) lib
+
+log_system_server:
+	cd log_system && $(MAKE) server
+		
 
 ### LIB TARGET 
 
