@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../src/screen.h"
-#include "../src/termlib.h"
-#include "../src/cursor.h"
+#include "screen.h"
+#include "termlib.h"
+#include "cursor.h"
 #include "log_system.h"
 
 void* init(termlib_context* ctx){

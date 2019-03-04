@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "../src/screen.h"
-#include "../src/termlib.h"
+#include "screen.h"
+#include "termlib.h"
 
 void* init(termlib_context* ctx){
     // Implement your high level code from here
