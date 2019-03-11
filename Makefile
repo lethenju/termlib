@@ -11,7 +11,7 @@ OBJECTS_DIR=$(BUILD_DIR)/obj
 EXE_DIR=$(BUILD_DIR)/exe
 SRC_DIR=src
 EXAMPLES_DIR=examples
-INC_DIR+=inc
+INC_DIR+=inc log_system/inc
 INC_PARAM=$(foreach d, $(INC_DIR), -I$d)
 F1_EXISTS=$(shell [ -e $(BUILD_DIR) ] && echo Y || echo N )
 
@@ -52,7 +52,7 @@ log_system_server:
 
 ### LIB TARGET 
 
-lib : setup clean log_system_lib screen.o cursor.o termlib.o
+lib : log_system_server log_system_lib screen.o cursor.o termlib.o
 
 screen.o: $(SRC_DIR)/screen.c
 	gcc -g -c $(SRC_DIR)/screen.c $(INC_PARAM) -o  $(OBJECTS_DIR)/screen.o
