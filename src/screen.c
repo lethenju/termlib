@@ -1,5 +1,6 @@
 #include "screen.h"
 #include "termlib_types.h"
+#include "log_system.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -8,6 +9,7 @@
 
 void screen_init(termlib_context *ctx, int width, int height)
 {
+    DEBUG_TRACE("screen init");
     int i;
     termlib_screen *screen = (termlib_screen *)malloc(sizeof(termlib_screen));
     screen->pixels = (pixel *)malloc(sizeof(pixel) * width * height);
@@ -21,10 +23,13 @@ void screen_init(termlib_context *ctx, int width, int height)
     screen->draw_screen = 0;
     pthread_create(&screen->display_thread, NULL, (void *)screen_display_thread, (void *)screen);
     ctx->screen = screen;
+    DEBUG_TRACE("screen init done!");
+
 }
 
 void display(termlib_screen *screen)
 {
+    DEBUG_TRACE("display");
     sem_wait(&(screen->display_semaphore));
     int i, j;
     system("clear");
@@ -49,6 +54,7 @@ void display(termlib_screen *screen)
 
 void *screen_display_thread(void *ctx_arg)
 {
+    DEBUG_TRACE("screen_display_thread");
     termlib_screen *ctx = (termlib_screen *)ctx_arg;
 
     while (!ctx->stop)
@@ -57,10 +63,13 @@ void *screen_display_thread(void *ctx_arg)
         if (ctx->draw_screen)
             display(ctx);
     }
+    WARNING_TRACE("exiting screen_display_thread");
+
 }
 
-void screen_frame_ready(termlib_screen * ctx) 
+void screen_frame_ready(termlib_screen *ctx)
 {
+    DEBUG_TRACE("screen_frame_ready");
     sem_wait(&(ctx->display_semaphore));
     int j;
     for (j = 0; j < ctx->height *  ctx->width; j++)
@@ -74,19 +83,22 @@ void screen_frame_ready(termlib_screen * ctx)
     }
     sem_post(&(ctx->display_semaphore));
     ctx->draw_screen = 1;
+    DEBUG_TRACE("screen_frame_ready done!");
 }
 
 void draw_rectangle(termlib_screen *ctx, int posX, int posY, int width, int height, char rep, color_enum_fg fg, color_enum_bg bg)
 {
+    DEBUG_TRACE("draw rectangle!");
     draw_line(ctx, posX, posY, posX+width, posY, rep, fg, bg);
     draw_line(ctx, posX, posY, posX, posY+height, rep, fg, bg);
     draw_line(ctx, posX+width, posY+height, posX+width, posY, rep, fg, bg);
     draw_line(ctx, posX+width, posY+height, posX, posY+height, rep, fg, bg);
-    
+    DEBUG_TRACE("draw rectangle done");
 }
 
 void fill_rectangle(termlib_screen *ctx, int posX, int posY, int width, int height, char rep, color_enum_fg fg, color_enum_bg bg)
 {
+    DEBUG_TRACE("fill rectangle");
     int i,j;
     for (i = 0; i < width; i++)
     {
@@ -95,11 +107,12 @@ void fill_rectangle(termlib_screen *ctx, int posX, int posY, int width, int heig
             set_pixel(ctx,posX+i, posY+j, rep, fg, bg);
         }
     }
+    DEBUG_TRACE("fill rectangle done");
 }
 
 void draw_line(termlib_screen *ctx, int posX, int posY, int posX2, int posY2, char rep, color_enum_fg fg, color_enum_bg bg)
 {
-
+    DEBUG_TRACE("draw line");
     float diffX = posX2 - posX;
     float diffY = posY2 - posY;
     float i;
@@ -109,10 +122,12 @@ void draw_line(termlib_screen *ctx, int posX, int posY, int posX2, int posY2, ch
     {
         set_pixel(ctx,(int) (posX+(i/max)*diffX),(int) (posY+(i/max)*diffY), rep, fg, bg);
     }
+    DEBUG_TRACE("draw line done");
 }
 
 void draw_circle(termlib_screen *ctx, int posX, int posY, int radius, char rep, color_enum_fg fg, color_enum_bg bg)
 {
+    DEBUG_TRACE("draw circle");
     radius = abs(radius);
     float perimeter = 10*radius;
     float i;
@@ -120,15 +135,18 @@ void draw_circle(termlib_screen *ctx, int posX, int posY, int radius, char rep, 
     {
         set_pixel(ctx, posX + radius*cos(i/radius), posY + radius*sin(i/radius), rep, fg, bg);
     }
+    DEBUG_TRACE("draw circle done");
 }
 
 void fill_circle(termlib_screen *ctx, int posX, int posY, int radius, char rep, color_enum_fg fg, color_enum_bg bg)
 {
+    DEBUG_TRACE("fill circle");
     int i = 0;
     for (i = 0; i < radius; i++) 
     {
         draw_circle(ctx, posX, posY, i, rep, fg, bg);
     }
+    DEBUG_TRACE("fill circle done");
     
 }
 
@@ -158,9 +176,11 @@ pixel* get_pixel(termlib_screen *ctx, int posX, int posY)
 
 void screen_end(termlib_screen *ctx)
 {
+    WARNING_TRACE("SCREEN END");
     ctx->stop = 1;
     pthread_join(ctx->display_thread, NULL);
     free(ctx->ready_pixels); 
     free(ctx->pixels);
     free(ctx);
+    WARNING_TRACE("SCREEN END ENDED");
 }
