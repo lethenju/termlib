@@ -1,4 +1,7 @@
 # termlib
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/972487a3b7454167bf6d71b2f6af705b)](https://app.codacy.com/app/lethenju/termlib?utm_source=github.com&utm_medium=referral&utm_content=lethenju/termlib&utm_campaign=Badge_Grade_Dashboard)
+
 Small terminal based application framework
 
 ## Usage
