@@ -1,3 +1,6 @@
 [submodule "log_system"]
 	path = log_system
 	url = git://github.com/lethenju/log_system
+[submodule "resman"]
+	path = resman
+	url = https://github.com/lethenju/resman
