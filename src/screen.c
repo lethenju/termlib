@@ -1,6 +1,7 @@
 #include "screen.h"
 #include "termlib_types.h"
 #include "log_system.h"
+#include "resman.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -11,13 +12,15 @@ void screen_init(termlib_context *ctx, int width, int height)
 {
     DEBUG_TRACE("screen init");
     int i;
-    termlib_screen *screen = (termlib_screen *)malloc(sizeof(termlib_screen));
-    screen->pixels = (pixel *)malloc(sizeof(pixel) * width * height);
-    screen->ready_pixels = (pixel *)malloc(sizeof(pixel) *  width * height);
+    termlib_screen *screen = resman_alloc("termlib_screen", sizeof(termlib_screen));
+    screen->pixels = resman_alloc("termlib screen->pixels", sizeof(pixel) * width * height);
+    screen->ready_pixels = resman_alloc("termlib screen->ready_pixels", sizeof(pixel) *  width * height);
+    screen->filter_pixels = resman_alloc("termlib screen->filter_pixels", sizeof(int) *  width * height);
     screen->width = width;
     screen->height = height;
     sem_init(&(screen->display_semaphore), 0, 1);
     fill_rectangle(screen, 0,0, width, height,' ', FG_DEFAULT, BG_DEFAULT);
+    rectangle_filter(screen, 0, 0, width, height, 1); // enabling all screen to be drawn on
     screen_frame_ready(screen);
     screen->stop = 0;
     screen->draw_screen = 0;
@@ -153,6 +156,9 @@ void fill_circle(termlib_screen *ctx, int posX, int posY, int radius, char rep, 
 
 void set_pixel(termlib_screen *ctx, int posX, int posY, char c, color_enum_fg fg, color_enum_bg bg)
 {
+    if (!(*(ctx->filter_pixels + posX * ctx->height + posY)))
+        return; // if the filter doesnt allow modification here
+
     pixel *p = ctx->pixels + posX * ctx->height + posY;
     p->rep = c;
     p->fg = fg;
@@ -174,13 +180,28 @@ pixel* get_pixel(termlib_screen *ctx, int posX, int posY)
     return ctx->pixels + posX * ctx->height + posY;
 }
 
+void rectangle_filter(termlib_screen *ctx, int posX, int posY, int width, int height, int value)
+{
+    int i,j;
+    DEBUG_TRACE("rectangle filter %d from %d, %d to %d, %d", 
+                value, posX, posY, width, height);
+    for (i = posX; i < posX + width; i++)
+    {
+        for ( j = posY; j < posY + height; j++ ) 
+        {
+            int* p = ctx->filter_pixels + i * ctx->height + j;
+            *p = value;
+        }
+    }
+}
+
 void screen_end(termlib_screen *ctx)
 {
     WARNING_TRACE("SCREEN END");
     ctx->stop = 1;
     pthread_join(ctx->display_thread, NULL);
-    free(ctx->ready_pixels); 
-    free(ctx->pixels);
-    free(ctx);
+    resman_free(ctx->ready_pixels); 
+    resman_free(ctx->pixels);
+    resman_free(ctx);
     WARNING_TRACE("SCREEN END ENDED");
 }
