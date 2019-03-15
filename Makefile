@@ -52,7 +52,7 @@ log_system_server:
 
 ### LIB TARGET 
 
-lib : log_system_server log_system_lib screen.o cursor.o termlib.o
+lib : setup clean log_system_lib screen.o cursor.o termlib.o
 
 screen.o: $(SRC_DIR)/screen.c
 	gcc -g -c $(SRC_DIR)/screen.c $(INC_PARAM) -o  $(OBJECTS_DIR)/screen.o
