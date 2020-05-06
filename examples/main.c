@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "screen.h"
 #include "termlib.h"
-#include "cursor.h"
 #include "log_system.h"
 #include "resman.h"
 

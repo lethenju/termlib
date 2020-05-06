@@ -3,9 +3,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#include "termlib_types.h"
-#include "screen.h"
-#include "cursor.h"
+#include "termlib.h"
 
 
 // when no specific callback init 

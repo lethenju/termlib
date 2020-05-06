@@ -1,5 +1,4 @@
-#include "screen.h"
-#include "termlib_types.h"
+#include "termlib.h"
 #include "log_system.h"
 #include <resman.h>
 #include <stdio.h>

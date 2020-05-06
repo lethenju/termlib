@@ -9,9 +9,6 @@ set(CMAKE_BUILD_TYPE Debug)
 
 set(INCLUDE_FILE
 	inc/termlib.h
-	inc/termlib_types.h
-	inc/screen.h
-	inc/cursor.h
 )
 
 set(LIBRARY_SOURCE_FILES
@@ -36,7 +33,7 @@ target_link_libraries(termlib
 )	
 
 set_target_properties(termlib PROPERTIES VERSION ${PROJECT_VERSION})
-set_target_properties(termlib PROPERTIES PUBLIC_HEADER inc/termlib.h)
+set_target_properties(termlib PROPERTIES PUBLIC_HEADER ${INCLUDE_FILE})
 
 target_include_directories(termlib PRIVATE inc)
 target_include_directories(termlib PRIVATE src)
@@ -65,15 +62,9 @@ add_executable(main_exe
 	${INCLUDE_FILE}
 )
 
-add_executable(physics_exe
-	examples/physics.c
-	${INCLUDE_FILE}
-)
 
 target_include_directories(clock_exe PRIVATE inc)
 target_include_directories(main_exe PRIVATE inc)
-target_include_directories(physics_exe PRIVATE inc)
-
 
 
 target_link_libraries(clock_exe
@@ -88,8 +79,3 @@ target_link_libraries(main_exe
 	pthread
 )	
 
-target_link_libraries(physics_exe
-	termlib
-	m
-	pthread
-)	
