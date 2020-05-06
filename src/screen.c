@@ -1,7 +1,7 @@
 #include "screen.h"
 #include "termlib_types.h"
 #include "log_system.h"
-#include "resman.h"
+#include <resman.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -18,6 +18,8 @@ void screen_init(termlib_context *ctx, int width, int height)
     screen->filter_pixels = resman_alloc("termlib screen->filter_pixels", sizeof(int) *  width * height);
     screen->width = width;
     screen->height = height;
+    
+    printf("euh ok 2\n");
     sem_init(&(screen->display_semaphore), 0, 1);
     fill_rectangle(screen, 0,0, width, height,' ', FG_DEFAULT, BG_DEFAULT);
     rectangle_filter(screen, 0, 0, width, height, 1); // enabling all screen to be drawn on
@@ -27,7 +29,6 @@ void screen_init(termlib_context *ctx, int width, int height)
     pthread_create(&screen->display_thread, NULL, (void *)screen_display_thread, (void *)screen);
     ctx->screen = screen;
     DEBUG_TRACE("screen init done!");
-
 }
 
 void display(termlib_screen *screen)

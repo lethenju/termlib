@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "screen.h"
 #include "termlib.h"
+#include <log_system.h>
+#include <resman.h>
 
 void* init(termlib_context* ctx){
     // Implement your high level code from here
-    
     // Edges of the screen
     fill_rectangle(ctx->screen, 0, 0, ctx->screen->width,1,'-', FG_DEFAULT, BG_DEFAULT);
     fill_rectangle(ctx->screen, 0, 0, 1, ctx->screen->height,'|', FG_DEFAULT, BG_DEFAULT);
@@ -36,7 +36,11 @@ void* event_loop(termlib_context* ctx) {
 // DO NOT TOUCH MAIN
 int main(int argc, char *argv[])
 {
+    resman_init();
+    log_init();
     termlib_context* ctx = termlib_init((void*)init);
     termlib_event_loop(ctx, (void*)event_loop);
     return 0;
+    log_end();
+    resman_end();
 }
