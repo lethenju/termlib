@@ -7,6 +7,14 @@ include(GNUInstallDirs)
 
 set(CMAKE_BUILD_TYPE Debug)
 
+
+add_subdirectory(
+	log_system/
+	resman/
+)
+
+
+
 set(INCLUDE_FILE
 	inc/termlib.h
 )
@@ -26,6 +34,8 @@ add_library(termlib STATIC
 set (ALL_LIBS 
      resman
 	 log_system
+	 pthread
+	 m
 )
 
 target_link_libraries(termlib
