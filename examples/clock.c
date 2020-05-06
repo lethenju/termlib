@@ -4,6 +4,7 @@
 #include "termlib.h"
 #include <log_system.h>
 #include <resman.h>
+#include <unistd.h>
 
 void* init(termlib_context* ctx){
     // Implement your high level code from here
