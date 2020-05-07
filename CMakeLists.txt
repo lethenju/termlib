@@ -7,16 +7,21 @@ include(GNUInstallDirs)
 
 set(CMAKE_BUILD_TYPE Debug)
 
+set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY true)
+
 
 add_subdirectory(
 	log_system/
+)
+
+add_subdirectory(
 	resman/
 )
 
 
-
 set(INCLUDE_FILE
 	inc/termlib.h
+	log_system/inc/log_system.h
 )
 
 set(LIBRARY_SOURCE_FILES
@@ -43,7 +48,7 @@ target_link_libraries(termlib
 )	
 
 set_target_properties(termlib PROPERTIES VERSION ${PROJECT_VERSION})
-set_target_properties(termlib PROPERTIES PUBLIC_HEADER ${INCLUDE_FILE})
+set_target_properties(termlib PROPERTIES PUBLIC_HEADER inc/termlib.h)
 
 target_include_directories(termlib PRIVATE inc)
 target_include_directories(termlib PRIVATE src)
@@ -58,8 +63,6 @@ install(TARGETS termlib
 #[[ Building Tests ]]
 
 	#[[ Compiling Main ]]
-
-
 
 
 add_executable(clock_exe
