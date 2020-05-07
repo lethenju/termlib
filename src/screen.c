@@ -11,46 +11,50 @@ void screen_init(termlib_context *ctx, int width, int height)
 {
     DEBUG_TRACE("screen init");
     int i;
+    DEBUG_TRACE("screen init : server initialisation");
+    termlib_server_init(ctx);
+
     termlib_screen *screen = resman_alloc("termlib_screen", sizeof(termlib_screen));
     screen->pixels = resman_alloc("termlib screen->pixels", sizeof(pixel) * width * height);
     screen->ready_pixels = resman_alloc("termlib screen->ready_pixels", sizeof(pixel) *  width * height);
     screen->filter_pixels = resman_alloc("termlib screen->filter_pixels", sizeof(int) *  width * height);
     screen->width = width;
     screen->height = height;
-    
-    printf("euh ok 2\n");
     sem_init(&(screen->display_semaphore), 0, 1);
     fill_rectangle(screen, 0,0, width, height,' ', FG_DEFAULT, BG_DEFAULT);
     rectangle_filter(screen, 0, 0, width, height, 1); // enabling all screen to be drawn on
     screen_frame_ready(screen);
     screen->stop = 0;
     screen->draw_screen = 0;
-    pthread_create(&screen->display_thread, NULL, (void *)screen_display_thread, (void *)screen);
+    pthread_create(&screen->display_thread, NULL, (void *)screen_display_thread, (void *)ctx);
     ctx->screen = screen;
     DEBUG_TRACE("screen init done!");
 }
 
-void display(termlib_screen *screen)
+void display(termlib_screen *screen, int socket)
 {
+    char* buffer = malloc (2048);
     DEBUG_TRACE("display");
     sem_wait(&(screen->display_semaphore));
     int i, j;
     system("clear");
     pixel *p = screen->ready_pixels; // getting first pixel
-    printf("\e[%dm(\e[%dm",p->bg, p->fg); // Setting color the first time
+    sprintf(buffer,"\e[%dm(\e[%dm",p->bg, p->fg); // Setting color the first time
     for (j = 0; j < screen->height; j++)
     {
         for (i = 0; i < screen->width; i++)
         {
             pixel *new = (screen->ready_pixels) + i * screen->height + j;
             if (p->bg != new->bg || p->fg != new->fg) { // change color only when it changes
-                printf("\e[%dm\e[%dm",new->bg, new->fg);
+                sprintf(buffer+strlen(buffer),"\e[%dm\e[%dm",new->bg, new->fg);
             }
-            printf("%c", new->rep);
+            sprintf(buffer+strlen(buffer),"%c", new->rep);
             p = new;
         }
-        printf("\n\r");
+        sprintf(buffer+strlen(buffer),"\n\r");
     }
+    send(socket, buffer, strlen(buffer), 0);
+    free(buffer);
     sem_post(&(screen->display_semaphore));
     screen->draw_screen = 0;
 }
@@ -58,13 +62,13 @@ void display(termlib_screen *screen)
 void *screen_display_thread(void *ctx_arg)
 {
     DEBUG_TRACE("screen_display_thread");
-    termlib_screen *ctx = (termlib_screen *)ctx_arg;
+    termlib_context *ctx = (termlib_context *)ctx_arg;
 
-    while (!ctx->stop)
+    while (!ctx->screen->stop)
     {
         usleep(100000);
-        if (ctx->draw_screen)
-            display(ctx);
+        if (ctx->screen->draw_screen)
+            display(ctx->screen, ctx->socket);
     }
     WARNING_TRACE("exiting screen_display_thread");
 

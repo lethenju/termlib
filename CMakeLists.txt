@@ -28,6 +28,7 @@ set(LIBRARY_SOURCE_FILES
 	src/cursor.c
 	src/screen.c
 	src/termlib.c
+	src/termlib_server.c
 )
 
 
@@ -58,6 +59,12 @@ install(TARGETS termlib
     	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
+#[[ Building Client]]
+
+add_executable(termlib_client
+	src/termlib_client.c
+	${INCLUDE_FILE}
+)
 
 
 #[[ Building Tests ]]

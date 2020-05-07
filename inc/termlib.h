@@ -92,6 +92,7 @@ typedef struct {
     termlib_input* input;   // pointer to the input structure
     termlib_cursor cursor;  // pointer to the cursor structure
     volatile int exit;      // exit flag. When it is turned to 1, the threads will exit and the application will stop.
+    int socket;             // socket of the client
 } termlib_context;
 
 
@@ -221,5 +222,7 @@ termlib_context* termlib_init2();
 void termlib_event_loop(termlib_context *ctx, void(*event_loop)(termlib_context*));
 
 void termlib_end(termlib_context *ctx);
+
+void termlib_server_init(termlib_context *ctx);
 
 #endif
